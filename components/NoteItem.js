@@ -1,24 +1,50 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet} from 'react-native';
-import {DrawerContentScrollView, DrawerItem, DrawerItemList} from "@react-navigation/drawer";
-import { MaterialIcons } from '@expo/vector-icons';
+import {Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 
-const NoteItem = ({bg}) => {
+const NoteItem = ({storeKey, title, text, date, bg, deleteNote}) => {
+
+    const createAlert = () =>
+        Alert.alert('Do you really want to delete this note?', '', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            { text: 'Yes', onPress: () => deleteNote(storeKey) },
+        ])
+
     return (
-        <View style={{...style.body, backgroundColor: bg}}>
-            <Text style={style.dateText}>date</Text>
-        </View>
+        <TouchableOpacity
+            style={{...style.body, backgroundColor: bg}}
+            onLongPress={() => createAlert()}
+        >
+            <Text style={style.dateText}>{date}</Text>
+            <Text style={style.titleText}>{title}</Text>
+            <Text style={style.textText}>{text}</Text>
+        </TouchableOpacity>
     );
 }
 
 const style = StyleSheet.create({
     body: {
-        margin: 4,
-        borderRadius: 16
+        marginVertical: 8,
+        marginHorizontal: 32,
+        padding: 24,
+        borderRadius: 24,
     },
     dateText: {
-        textAlign: 'right'
+        textAlign: 'right',
+        fontSize: 18
+    },
+    titleText: {
+        textAlign: 'center',
+        fontSize: 32
+    },
+    textText: {
+        textAlign: 'justify',
+        fontSize: 18
     }
+
 })
 
 export default NoteItem

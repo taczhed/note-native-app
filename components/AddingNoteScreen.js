@@ -1,14 +1,50 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, ToastAndroid} from 'react-native';
 import {LinearGradient} from "expo-linear-gradient";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import * as SecureStore from 'expo-secure-store';
 
 const AddingNoteScreen = () => {
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
+
+    const makeID = (length) => {
+        let result = ''
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+
+    const matchDate = () => {
+        const month = ["January", "February", "March","April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const d = new Date();
+        return `${d.getDay()} ${month[d.getMonth()]}`;
+    }
+
+    const saveNote = async (title, text) => {
+        const keys = await SecureStore.getItemAsync("keys")
+        const key = makeID(6)
+        const date = matchDate()
+        if (keys === null) await SecureStore.setItemAsync("keys", key)
+        else await SecureStore.setItemAsync("keys", `${keys}|${key}`)
+        await SecureStore.setItemAsync(key, `${title}|${text}|${date}`)
+
+        ToastAndroid.showWithGravity(
+            'Note saved!',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+
+    }
+
+    useEffect(() => {
+
+    })
 
     return(
         <LinearGradient
@@ -29,7 +65,7 @@ const AddingNoteScreen = () => {
                     onChangeText={(text) => setNote(text)}
                 />
                 <TouchableOpacity
-                    onPress={() => console.log("wrr")}
+                    onPress={() => saveNote(title, note)}
                     style={style.button}
                 >
                     <Text style={style.buttonText}>Add</Text>

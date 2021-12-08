@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Image, StyleSheet, ViewText, Text } from 'react-native';
+import { StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerItem} from '@react-navigation/drawer';
+import { createDrawerNavigator} from '@react-navigation/drawer';
 import ListOfNotes from "./components/ListOfNotes";
 import AddingNoteScreen from "./components/AddingNoteScreen";
 import CustomDrawer from "./components/CustomDrawer";
 import { MaterialIcons } from '@expo/vector-icons';
+import {useEffect} from "react";
+import * as SecureStore from "expo-secure-store";
 
 const Drawer = createDrawerNavigator();
 
@@ -17,6 +19,13 @@ const Drawer = createDrawerNavigator();
 // bg #e2e6e8
 
 export default function App() {
+
+    useEffect(async () => {
+            const keys = await SecureStore.getItemAsync("keys")
+            if (keys === null) await SecureStore.setItemAsync("keys", "");
+            console.log(keys)
+    },[])
+
   return (
       <NavigationContainer>
         <Drawer.Navigator
@@ -33,7 +42,7 @@ export default function App() {
               options={{
                   title: 'Notes',
                   headerStyle: {
-                      backgroundColor: '#fae3d9',
+                      backgroundColor: '#F2CBBB',
                   },
                   headerTintColor: '#000000',
                   headerTitleStyle: {
@@ -41,7 +50,7 @@ export default function App() {
                   },
                   drawerIcon: () => <MaterialIcons name="sticky-note-2" size={30} color="black" />,
                   drawerItemStyle: {
-                      backgroundColor: '#fae3d9',
+                      backgroundColor: '#F2CBBB',
                       padding: 6
                   },
                   drawerLabelStyle: {

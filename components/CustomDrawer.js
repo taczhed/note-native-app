@@ -1,9 +1,16 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet} from 'react-native';
+import {StyleSheet, Alert} from 'react-native';
 import {DrawerContentScrollView, DrawerItem, DrawerItemList} from "@react-navigation/drawer";
 import { MaterialIcons } from '@expo/vector-icons';
 
 const CustomDrawerContent = (routes) => {
+
+    const informationOfAuthor = () => {
+        Alert.alert('Version 1.0', 'Application made in React Native by Patryk Lach', [
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ]);
+    }
+
     return (
         <DrawerContentScrollView {...routes}>
 
@@ -14,7 +21,7 @@ const CustomDrawerContent = (routes) => {
             <DrawerItem
                 label="Info"
                 icon={() => <MaterialIcons name="info" size={30} color="black" />}
-                onPress={() => console.log("test")}
+                onPress={() => informationOfAuthor()}
                 style={styles.drawerItem}
                 labelStyle={{
                     fontWeight: 'bold',
