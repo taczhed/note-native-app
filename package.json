@@ -21,7 +21,8 @@
     "react-native-screens": "~3.8.0",
     "react-native-safe-area-context": "3.3.2",
     "expo-linear-gradient": "~10.0.3",
-    "expo-secure-store": "~11.0.3"
+    "expo-secure-store": "~11.0.3",
+    "@react-native-picker/picker": "2.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {Text, StyleSheet, TouchableOpacity, Alert, View} from 'react-native';
 
-const NoteItem = ({storeKey, title, text, date, bg, deleteNote}) => {
+const NoteItem = ({storeKey, title, text, date, category, color, deleteNote}) => {
 
     const createAlert = () =>
         Alert.alert('Do you really want to delete this note?', '', [
@@ -15,10 +15,13 @@ const NoteItem = ({storeKey, title, text, date, bg, deleteNote}) => {
 
     return (
         <TouchableOpacity
-            style={{...style.body, backgroundColor: bg}}
+            style={{...style.body, backgroundColor: color}}
             onLongPress={() => createAlert()}
         >
-            <Text style={style.dateText}>{date}</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={style.categoryText}>{category}</Text>
+                <Text style={style.dateText}>{date}</Text>
+            </View>
             <Text style={style.titleText}>{title}</Text>
             <Text style={style.textText}>{text}</Text>
         </TouchableOpacity>
@@ -42,7 +45,17 @@ const style = StyleSheet.create({
     },
     textText: {
         textAlign: 'justify',
-        fontSize: 18
+        fontSize: 18,
+        padding: 8,
+        marginBottom: 16
+    },
+    categoryText: {
+        fontSize: 18,
+        padding: 8,
+        marginBottom: 16,
+        backgroundColor: '#363636',
+        color: '#ffffff',
+        borderRadius: 16
     }
 
 })

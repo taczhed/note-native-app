@@ -1,4 +1,4 @@
-import {StyleSheet, ScrollView } from 'react-native';
+import {StyleSheet, ScrollView, TextInput} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LinearGradient} from "expo-linear-gradient";
 import * as SecureStore from "expo-secure-store";
@@ -19,7 +19,7 @@ const ListOfNotes = ({navigation}) => {
             let notesArray = keys.map(key => {
                 if (key !== "") return SecureStore.getItemAsync(key).then(objectString => {
                     const value = objectString.split('|')
-                    return {title: value[0], text: value[1], date: value[2], key: key}
+                    return {title: value[0], text: value[1], date: value[2], category: value[3], color: value[4], key: key}
                 })
             })
             await Promise.all(notesArray)
@@ -30,12 +30,6 @@ const ListOfNotes = ({navigation}) => {
     useEffect(async () => {
         await reloadStore()
     }, [isFocused])
-
-    const generateColor = () => {
-        const random = Math.floor(Math.random() * 5)
-        const bgArray = ['#aacdc5', '#79b5c0', '#C5F6FA', '#FCE6A9', '#A7DB8C']
-        return bgArray[random]
-    }
 
     const deleteNote = async (key) => {
         let finalKeysString = ""
@@ -57,6 +51,12 @@ const ListOfNotes = ({navigation}) => {
                 <ScrollView
                     style={style.content}
                 >
+                    <TextInput
+                        style={style.title}
+                        underlineColorAndroid="#262626"
+                        placeholder="Search by category, title or content..."
+                        // onChangeText={(text) => setCategory(text)}
+                    />
                     {notes.map(component => (
                         <NoteItem
                             key={component.key}
@@ -64,7 +64,8 @@ const ListOfNotes = ({navigation}) => {
                             title={component.title}
                             text={component.text}
                             date={component.date}
-                            bg={generateColor()}
+                            category={component.category}
+                            color={component.color}
                             deleteNote={deleteNote}
                         />
                     ))}
@@ -81,7 +82,12 @@ const style = StyleSheet.create({
     content: {
         flex: 1,
         flexDirection: 'column'
-    }
+    },
+    title: {
+        padding: 12,
+        fontSize: 24,
+        margin: 16
+    },
 })
 
 export default ListOfNotes

@@ -8,6 +8,7 @@ import CustomDrawer from "./components/CustomDrawer";
 import { MaterialIcons } from '@expo/vector-icons';
 import {useEffect} from "react";
 import * as SecureStore from "expo-secure-store";
+import AddingCategoryScreen from "./components/AddingCategoryScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -23,7 +24,11 @@ export default function App() {
     useEffect(async () => {
             const keys = await SecureStore.getItemAsync("keys")
             if (keys === null) await SecureStore.setItemAsync("keys", "");
-            console.log(keys)
+
+            const categories = await SecureStore.getItemAsync("categories")
+            if (categories === null) await SecureStore.setItemAsync("categories", "");
+
+            console.log(keys, categories)
     },[])
 
   return (
@@ -48,16 +53,6 @@ export default function App() {
                   headerTitleStyle: {
                       fontWeight: 'bold',
                   },
-                  drawerIcon: () => <MaterialIcons name="sticky-note-2" size={30} color="black" />,
-                  drawerItemStyle: {
-                      backgroundColor: '#F2CBBB',
-                      padding: 6
-                  },
-                  drawerLabelStyle: {
-                      fontWeight: 'bold',
-                      fontSize: 20,
-                      padding: 6
-                  }
               }}
           />
           <Drawer.Screen
@@ -71,18 +66,22 @@ export default function App() {
                   headerTintColor: '#000000',
                   headerTitleStyle: {
                       fontWeight: 'bold',
-                  },
-                  drawerIcon: () => <MaterialIcons name="note-add" size={30} color="black" />,
-                  drawerItemStyle: {
-                      backgroundColor: '#8ac6d1',
-                      padding: 6
-                  },
-                  drawerLabelStyle: {
-                      fontWeight: 'bold',
-                      fontSize: 20,
-                      padding: 6
                   }
               }}
+            />
+            <Drawer.Screen
+                name="AddingCategoryScreen"
+                component={AddingCategoryScreen}
+                options={{
+                    title: 'Add Category',
+                    headerStyle: {
+                        backgroundColor: '#B7ADED',
+                    },
+                    headerTintColor: '#000000',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    }
+                }}
             />
         </Drawer.Navigator>
       </NavigationContainer>
