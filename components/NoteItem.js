@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
 
-const NoteItem = ({storeKey, title, text, date, bg, deleteNote}) => {
+const NoteItem = ({storeKey, title, text, date, color, deleteNote}) => {
 
     const createAlert = () =>
         Alert.alert('Do you really want to delete this note?', '', [
@@ -10,12 +10,12 @@ const NoteItem = ({storeKey, title, text, date, bg, deleteNote}) => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
             },
-            { text: 'Yes', onPress: () => deleteNote(storeKey) },
+            { text: 'Yes', onPress: () => deleteNote(storeKey)},
         ])
 
     return (
         <TouchableOpacity
-            style={{...style.body, backgroundColor: bg}}
+            style={{...style.body, backgroundColor: color}}
             onLongPress={() => createAlert()}
         >
             <Text style={style.dateText}>{date}</Text>

@@ -5,7 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import NoteItem from "./NoteItem";
 import {useIsFocused} from "@react-navigation/native";
 
-const ListOfNotes = ({navigation}) => {
+const ListOfNotes = () => {
 
     const [notes, setNotes] = useState([])
     const isFocused = useIsFocused()
@@ -19,7 +19,7 @@ const ListOfNotes = ({navigation}) => {
             let notesArray = keys.map(key => {
                 if (key !== "") return SecureStore.getItemAsync(key).then(objectString => {
                     const value = objectString.split('|')
-                    return {title: value[0], text: value[1], date: value[2], key: key}
+                    return {title: value[0], text: value[1], date: value[2], color: value[3], key: key}
                 })
             })
             await Promise.all(notesArray)
@@ -31,12 +31,6 @@ const ListOfNotes = ({navigation}) => {
         await reloadStore()
     }, [isFocused])
 
-    const generateColor = () => {
-        const random = Math.floor(Math.random() * 5)
-        const bgArray = ['#aacdc5', '#79b5c0', '#C5F6FA', '#FCE6A9', '#A7DB8C']
-        return bgArray[random]
-    }
-
     const deleteNote = async (key) => {
         let finalKeysString = ""
         let keys = await SecureStore.getItemAsync("keys")
@@ -47,7 +41,6 @@ const ListOfNotes = ({navigation}) => {
         await SecureStore.deleteItemAsync(key)
         await reloadStore()
     }
-
 
     return(
         <LinearGradient
@@ -64,7 +57,7 @@ const ListOfNotes = ({navigation}) => {
                             title={component.title}
                             text={component.text}
                             date={component.date}
-                            bg={generateColor()}
+                            color={component.color}
                             deleteNote={deleteNote}
                         />
                     ))}

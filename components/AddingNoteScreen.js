@@ -28,11 +28,18 @@ const AddingNoteScreen = ({navigation}) => {
         const keys = await SecureStore.getItemAsync("keys")
         const key = makeID(6)
         const date = matchDate()
+        const color = generateColor()
         if (keys === null) await SecureStore.setItemAsync("keys", key)
         else await SecureStore.setItemAsync("keys", `${keys}|${key}`)
-        await SecureStore.setItemAsync(key, `${title}|${text}|${date}`)
+        await SecureStore.setItemAsync(key, `${title}|${text}|${date}|${color}`)
         await ToastAndroid.showWithGravity('Note saved!', ToastAndroid.SHORT, ToastAndroid.CENTER)
         await navigation.navigate('ListOfNotes')
+    }
+
+    const generateColor = () => {
+        const random = Math.floor(Math.random() * 5)
+        const bgArray = ['#aacdc5', '#79b5c0', '#C5F6FA', '#FCE6A9', '#A7DB8C']
+        return bgArray[random]
     }
 
     return(
