@@ -1,4 +1,4 @@
-import {StyleSheet, View, FlatList, ScrollView, TouchableOpacity, Text, Dimensions} from 'react-native';
+import {StyleSheet, ScrollView } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {LinearGradient} from "expo-linear-gradient";
 import * as SecureStore from "expo-secure-store";
