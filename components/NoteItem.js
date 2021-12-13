@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text, StyleSheet, TouchableOpacity, Alert, View} from 'react-native';
 
-const NoteItem = ({storeKey, title, text, date, category, color, deleteNote}) => {
+const NoteItem = ({navigation, storeKey, title, text, date, category, color, deleteNote}) => {
 
     const createAlert = () =>
         Alert.alert('Do you really want to delete this note?', '', [
@@ -17,6 +17,14 @@ const NoteItem = ({storeKey, title, text, date, category, color, deleteNote}) =>
         <TouchableOpacity
             style={{...style.body, backgroundColor: color}}
             onLongPress={() => createAlert()}
+            onPress={() => navigation.navigate('EditingNoteScreen', {
+                title: title,
+                storeKey: storeKey,
+                text: text,
+                date: date,
+                category: category,
+                color: color
+            })}
         >
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Text style={style.categoryText}>{category}</Text>

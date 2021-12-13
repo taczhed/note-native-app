@@ -10,6 +10,11 @@ const ListOfNotes = ({navigation}) => {
     const [notes, setNotes] = useState([])
     const isFocused = useIsFocused()
 
+    useEffect(async () => {
+        const newNotes = await reloadStore()
+        await setNotes(newNotes)
+    }, [isFocused])
+
     const reloadStore = async () => {
         let keys = await SecureStore.getItemAsync("keys")
         if (keys !== null) {
@@ -23,13 +28,9 @@ const ListOfNotes = ({navigation}) => {
                 })
             })
             await Promise.all(notesArray)
-            setNotes(notesArray.map(obj => obj._W))
+            return notesArray.map(obj => obj._W)
         } else setNotes([])
     }
-
-    useEffect(async () => {
-        await reloadStore()
-    }, [isFocused])
 
     const deleteNote = async (key) => {
         let finalKeysString = ""
@@ -39,7 +40,18 @@ const ListOfNotes = ({navigation}) => {
         keys.map(keyString => finalKeysString += `|${keyString}`)
         await SecureStore.setItemAsync("keys", finalKeysString)
         await SecureStore.deleteItemAsync(key)
-        await reloadStore()
+        const newNotes = await reloadStore()
+        await setNotes(newNotes)
+    }
+
+    const searchNotes = async (text) => {
+        let newNotes = await reloadStore()
+        newNotes = newNotes.filter(noteObject => (
+            noteObject.text.toLowerCase().includes(text.toLowerCase()) ||
+            noteObject.title.toLowerCase().includes(text.toLowerCase()) ||
+            noteObject.category.toLowerCase().includes(text.toLowerCase())
+        ))
+        await setNotes(newNotes)
     }
 
 
@@ -55,11 +67,12 @@ const ListOfNotes = ({navigation}) => {
                         style={style.title}
                         underlineColorAndroid="#262626"
                         placeholder="Search by category, title or content..."
-                        // onChangeText={(text) => setCategory(text)}
+                        onChangeText={(text) => searchNotes(text)}
                     />
                     {notes.map(component => (
                         <NoteItem
                             key={component.key}
+                            navigation={navigation}
                             storeKey={component.key}
                             title={component.title}
                             text={component.text}

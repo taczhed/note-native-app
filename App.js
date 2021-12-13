@@ -9,6 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import {useEffect} from "react";
 import * as SecureStore from "expo-secure-store";
 import AddingCategoryScreen from "./components/AddingCategoryScreen";
+import EditingNoteScreen from "./components/EditingNoteScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -76,6 +77,20 @@ export default function App() {
                     title: 'Add Category',
                     headerStyle: {
                         backgroundColor: '#B7ADED',
+                    },
+                    headerTintColor: '#000000',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    }
+                }}
+            />
+            <Drawer.Screen
+                name="EditingNoteScreen"
+                component={EditingNoteScreen}
+                options={{
+                    title: 'Edit Note',
+                    headerStyle: {
+                        backgroundColor: '#f5d80c',
                     },
                     headerTintColor: '#000000',
                     headerTitleStyle: {
